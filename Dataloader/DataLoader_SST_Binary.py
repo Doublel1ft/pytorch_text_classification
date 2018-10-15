@@ -93,10 +93,6 @@ class DataLoader(DataLoaderHelp):
         self.max_count = config.max_count
         self.path = path
         self.shuffle = shuffle
-        # char feature
-        # self.pad_char = [char_pad, char_pad]
-        # self.pad_char = []
-        # self.max_char_len = config.max_char_len
 
     def dataLoader(self):
         """
@@ -159,22 +155,5 @@ class DataLoader(DataLoaderHelp):
             # print("\n")
         return insts
 
-    def _add_char(self, word):
-        """
-        :param word:
-        :return:
-        """
-        char = []
-        # char feature
-        for i in range(len(word)):
-            char.append(word[i])
-        if len(char) > self.max_char_len:
-            half = self.max_char_len // 2
-            word_half = word[:half] + word[-(self.max_char_len - half):]
-            char = word_half
-        else:
-            for i in range(self.max_char_len - len(char)):
-                char.append(char_pad)
-        return char
 
 

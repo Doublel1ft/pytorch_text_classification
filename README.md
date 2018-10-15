@@ -9,10 +9,10 @@
 
 ## Usage ##
  
-modify the config file, see the Config directory([here](https://github.com/bamtercelboo/cnn-lstm-bilstm-deepcnn-clstm-in-pytorch/tree/master/Config)) for detail.  
+modify the config file, see the Config directory([here](https://github.com/bamtercelboo/pytorch_text_classification/tree/master/Config)) for detail.  
 
 	1、python main.py
-	2、python main.py --config_file ./Config/config.cfg 
+	2、python main.py --config_file ./Config/config.cfg --train -p
 
 
 ## Model ##

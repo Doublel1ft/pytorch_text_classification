@@ -21,6 +21,7 @@
 	- `shuffle/epochs-shuffle`(True or False) ------ shuffle data .
 
 - [Save]
+	- `save_pkl` (True or False) ------ save pkl file for test opition.
 	- `pkl_directory` (path) ------ save pkl directory path.
 	- `pkl_data` (path) ------ save pkl data path.
 	- `pkl_alphabet` (path) ------ save pkl alphabet path.
@@ -37,20 +38,15 @@
 	- `rm_model` (True or False) ------ remove model to save space(now not use).
 
 - [Model]
-	- `model-bilstm` (True or False) ------ Bilstm model.
 	- `model-***`(True or False) ------ *** model.
-	- `use_char `(True or False) ------ CNN feature
-	- `use_crf `(True or False) ------ CRF feature
+	- `wide_conv`(True or False) ------ wide model.
 	- `lstm-layers` (integer) ------ number layers of lstm.
 	- `embed-dim` (integer) ------ embedding dim = pre-trained embedding dim.
 	- `embed-finetune` (True or False) ------ word embedding finetune or no-finetune.
 	- `lstm-hiddens` (integer) ------numbers of lstm hidden.
 	- `dropout-emb/dropout `(float) ------ dropout for prevent overfitting.
-	- `windows-size` (integer) ------ Context window feature size.
-	- `max_char_len` (integer) ------ The maximum length of a word.
-	- `char_dim` (integer) ------ The conv char dimension.
 	- `conv_filter_sizes` (str(3,4,5)) ------ conv filter sizes split by a comma in English.
-	- `conv_filter_nums` (str(30,40,50)) ------ conv filter nums split by a comma in English.
+	- `conv_filter_nums` (int(200)) ------ conv filter nums.
 
 - [Optimizer]
 	- `adam` (True or False) ------ `torch.optim.Adam`

@@ -154,11 +154,6 @@ class Iterators:
             # label
             batch_label_features.data[id_inst] = inst.label_index[0]
 
-        # prepare for pack_padded_sequence
-        # sorted_inputs_words, sorted_seq_lengths, desorted_indices = self._prepare_pack_padded_sequence(
-        #     batch_word_features, sentence_length)
-        # print(sorted_seq_lengths)
-
         # batch
         features = Batch_Features()
         features.inst = insts
@@ -174,45 +169,6 @@ class Iterators:
         if self.config.use_cuda is True:
             features.cuda(features)
         return features
-
-    @staticmethod
-    def _prepare_pack_padded_sequence(inputs_words, seq_lengths, descending=True):
-        """
-        :param inputs_words:
-        :param seq_lengths:
-        :param descending:
-        :return:
-        """
-        sorted_seq_lengths, indices = torch.sort(torch.LongTensor(seq_lengths), descending=descending)
-        _, desorted_indices = torch.sort(indices, descending=False)
-        sorted_inputs_words = inputs_words[indices]
-        return sorted_inputs_words, sorted_seq_lengths.numpy(), desorted_indices
-
-    @staticmethod
-    def _prepare_winfeature(B, T, wsize=5):
-        """
-        :param B:  batch size
-        :param T:  words size
-        :param wsize:  windows size
-        :return:
-        """
-        assert (wsize % 2 != 0), "win feature size must be a odd number"
-        winfeat = torch.zeros(T, wsize)
-        winfeat_batch = torch.zeros(B, T, wsize).type(torch.LongTensor)
-        wsizehalf = wsize // 2
-        for t in range(T):
-            for w in range(-wsizehalf, wsizehalf + 1):
-                if (w + t) < 0 or (w + t + 1) > T:
-                    winfeat[t][w + wsizehalf] = T
-                    continue
-                winfeat[t][w + wsizehalf] = w + t
-        for b in range(B):
-            winfeat_batch[b] = winfeat
-        winfeat_batch = Variable(winfeat_batch)
-        return winfeat_batch
-
-
-
 
 
 
