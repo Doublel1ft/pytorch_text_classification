@@ -89,14 +89,14 @@ class Iterators:
             # word
             for index in range(inst.words_size):
                 word = inst.words[index]
-                wordId = operator.word_alphabet.loadWord2idAndId2Word(word)
+                wordId = operator.word_alphabet.from_string(word)
                 if wordId == -1:
                     wordId = operator.word_unkId
                 inst.words_index.append(wordId)
 
             # label
             label = inst.labels[0]
-            labelId = operator.label_alphabet.loadWord2idAndId2Word(label)
+            labelId = operator.label_alphabet.from_string(label)
             inst.label_index.append(labelId)
 
     def _Create_Each_Iterator(self, insts, batch_size, operator):

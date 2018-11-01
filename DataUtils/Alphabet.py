@@ -123,9 +123,9 @@ class CreateAlphabet:
         self.label_alphabet.initialWord2idAndId2Word(self.label_state)
 
         # unkId and paddingId
-        self.word_unkId = self.word_alphabet.loadWord2idAndId2Word(unkkey)
-        self.word_paddingId = self.word_alphabet.loadWord2idAndId2Word(paddingkey)
-        self.label_paddingId = self.label_alphabet.loadWord2idAndId2Word(paddingkey)
+        self.word_unkId = self.word_alphabet.from_string(unkkey)
+        self.word_paddingId = self.word_alphabet.from_string(paddingkey)
+        self.label_paddingId = self.label_alphabet.from_string(paddingkey)
 
         # fix the vocab
         self.word_alphabet.set_fixed_flag(True)
@@ -159,7 +159,8 @@ class Alphabet:
         """
         for key in data:
             if data[key] >= self.min_freq:
-                self.loadWord2idAndId2Word(key)
+                # self.loadWord2idAndId2Word(key)
+                self.from_string(key)
         self.set_fixed_flag(True)
 
     def set_fixed_flag(self, bfixed):
@@ -171,7 +172,8 @@ class Alphabet:
         if (not self.fixed_vocab) and (self.vocab_size >= self.max_cap):
             self.fixed_vocab = True
 
-    def loadWord2idAndId2Word(self, string):
+    # def loadWord2idAndId2Word(self, string):
+    def from_string(self, string):
         """
         :param string:
         :return:
