@@ -3,7 +3,7 @@
 
 ## Requirement ##
 
-	pyorch : 0.3.1
+	pyorch : 1.0.1
 	python : 3.6
 	cuda : 8.0/9.0 (support cuda speed up, can chose)
 
@@ -12,7 +12,7 @@
 modify the config file, see the Config directory([here](https://github.com/bamtercelboo/pytorch_text_classification/tree/master/Config)) for detail.  
 
 	1、python main.py
-	2、python main.py --config_file ./Config/config.cfg --train -p
+	2、python main.py --config_file ./Config/config.cfg --device cuda:0 --train -p
 
 
 ## Model ##
