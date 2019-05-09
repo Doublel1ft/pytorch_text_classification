@@ -12,6 +12,7 @@
 import torch
 from torch.autograd import Variable
 import random
+import numpy as np
 
 from DataUtils.Common import *
 torch.manual_seed(seed_num)
@@ -31,13 +32,13 @@ class Batch_Features:
         self.sentence_length = []
 
     @staticmethod
-    def cuda(features):
+    def cuda(features, device):
         """
         :param features:
         :return:
         """
-        features.word_features = features.word_features.cuda()
-        features.label_features = features.label_features.cuda()
+        features.word_features = features.word_features.to(device)
+        features.label_features = features.label_features.to(device)
 
 
 class Iterators:
@@ -46,6 +47,7 @@ class Iterators:
     """
     def __init__(self, batch_size=None, data=None, operator=None, config=None):
         self.config = config
+        self.device = config.device
         self.batch_size = batch_size
         self.data = data
         self.operator = operator
@@ -138,21 +140,25 @@ class Iterators:
 
         # create with the Tensor/Variable
         # word features
-        batch_word_features = Variable(torch.zeros(batch_length, max_word_size).type(torch.LongTensor))
+        # batch_word_features = Variable(torch.zeros(batch_length, max_word_size).type(torch.LongTensor))
+        batch_word_features = np.zeros((batch_length, max_word_size))
         # label feature
-        batch_label_features = Variable(torch.zeros(batch_length * 1).type(torch.LongTensor))
+        batch_label_features = np.zeros((batch_length * 1))
 
         for id_inst in range(batch_length):
             inst = insts[id_inst]
             # copy with the word features
             for id_word_index in range(max_word_size):
                 if id_word_index < inst.words_size:
-                    batch_word_features.data[id_inst][id_word_index] = inst.words_index[id_word_index]
+                    batch_word_features[id_inst][id_word_index] = inst.words_index[id_word_index]
                 else:
-                    batch_word_features.data[id_inst][id_word_index] = operator.word_paddingId
+                    batch_word_features[id_inst][id_word_index] = operator.word_paddingId
 
             # label
-            batch_label_features.data[id_inst] = inst.label_index[0]
+            batch_label_features[id_inst] = inst.label_index[0]
+
+        batch_word_features = torch.from_numpy(batch_word_features).long()
+        batch_label_features = torch.from_numpy(batch_label_features).long()
 
         # batch
         features = Batch_Features()
@@ -166,8 +172,8 @@ class Iterators:
         # features.desorted_indices = desorted_indices
         # features.desorted_indices = None
 
-        if self.config.use_cuda is True:
-            features.cuda(features)
+        if self.device != cpu_device:
+            features.cuda(features, self.device)
         return features
 
 

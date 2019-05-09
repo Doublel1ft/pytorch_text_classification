@@ -40,8 +40,8 @@ class BiLSTM(nn.Module):
 
         if self.pretrained_embed:
             self.embed.weight.data.copy_(self.pretrained_weight)
-        else:
-            init_embedding(self.embed.weight)
+        # else:
+        #     init_embedding(self.embed.weight)
 
         self.dropout_embed = nn.Dropout(self.dropout_emb)
         self.dropout = nn.Dropout(self.dropout)
@@ -50,9 +50,7 @@ class BiLSTM(nn.Module):
                               bidirectional=True, batch_first=True, bias=True)
 
         self.linear = nn.Linear(in_features=self.lstm_hiddens * 2, out_features=C, bias=True)
-        init_linear(self.linear)
-        # init.xavier_uniform(self.linear.weight)
-        # self.linear.bias.data.uniform_(-np.sqrt(6 / (config.lstm_hiddens * 2 + 1)), np.sqrt(6 / (config.lstm_hiddens * 2 + 1)))
+        init_linear_weight_bias(self.linear)
 
     def forward(self, word, sentence_length):
         """
@@ -71,6 +69,6 @@ class BiLSTM(nn.Module):
         x = x.permute(0, 2, 1)
         x = self.dropout(x)
         x = F.max_pool1d(x, x.size(2)).squeeze(2)
-        x = F.tanh(x)
+        # x = F.tanh(x)
         logit = self.linear(x)
         return logit

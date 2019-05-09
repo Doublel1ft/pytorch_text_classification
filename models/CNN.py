@@ -43,8 +43,8 @@ class CNN(nn.Module):
 
         if self.pretrained_embed:
             self.embed.weight.data.copy_(self.pretrained_weight)
-        else:
-            init_embedding(self.embed.weight)
+        # else:
+        #     init_embedding(self.embed.weight)
 
         self.dropout_embed = nn.Dropout(self.dropout_emb)
         self.dropout = nn.Dropout(self.dropout)
@@ -57,14 +57,14 @@ class CNN(nn.Module):
         else:
             print("Using Narrow Convolution")
             self.conv = [nn.Conv2d(in_channels=Ci, out_channels=kernel_nums, kernel_size=(K, D), bias=True) for K in kernel_sizes]
-
+        print(self.conv)
         for conv in self.conv:
             if self.use_cuda:
                 conv.cuda()
 
         in_fea = len(kernel_sizes) * kernel_nums
         self.linear = nn.Linear(in_features=in_fea, out_features=C, bias=True)
-        init_linear(self.linear)
+        init_linear_weight_bias(self.linear)
 
     def forward(self, word, sentence_length):
         """

@@ -64,10 +64,10 @@ class Train(object):
         :return:
         """
         if learning_algorithm == "SGD":
-            loss_function = nn.CrossEntropyLoss(size_average=False)
+            loss_function = nn.CrossEntropyLoss(reduction="sum")
             return loss_function
         else:
-            loss_function = nn.CrossEntropyLoss(size_average=True)
+            loss_function = nn.CrossEntropyLoss(reduction="mean")
             return loss_function
 
     def _clip_model_norm(self, clip_max_norm_use, clip_max_norm):
@@ -79,7 +79,7 @@ class Train(object):
         if clip_max_norm_use is True:
             gclip = None if clip_max_norm == "None" else float(clip_max_norm)
             assert isinstance(gclip, float)
-            utils.clip_grad_norm(self.model.parameters(), max_norm=gclip)
+            utils.clip_grad_norm_(self.model.parameters(), max_norm=gclip)
 
     def _dynamic_lr(self, config, epoch, new_lr):
         """
@@ -184,7 +184,7 @@ class Train(object):
                 if (steps - 1) % self.config.log_interval == 0:
                     accuracy = self.getAcc(logit, labels, batch_size)
                     sys.stdout.write(
-                        "\nbatch_count = [{}] , loss is {:.6f}, [accuracy is {:.6f}%]".format(batch_count + 1, loss.data[0], accuracy))
+                        "\nbatch_count = [{}] , loss is {:.6f}, [accuracy is {:.6f}%]".format(batch_count + 1, loss.item(), accuracy))
             end_time = time.time()
             print("\nTrain Time {:.3f}".format(end_time - start_time), end="")
             self.eval(model=self.model, epoch=epoch, config=self.config)

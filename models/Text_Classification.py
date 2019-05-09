@@ -47,7 +47,9 @@ class Text_Classification(nn.Module):
         self.wide_conv = config.wide_conv
         self.conv_filter_sizes = self._conv_filter(config.conv_filter_sizes)
         self.conv_filter_nums = config.conv_filter_nums
-        self.use_cuda = config.use_cuda
+        self.use_cuda = True
+        if config.device == cpu_device:
+            self.use_cuda = False
 
         if self.config.model_bilstm:
             self.model = BiLSTM(embed_num=self.embed_num, embed_dim=self.embed_dim, label_num=self.label_num,
